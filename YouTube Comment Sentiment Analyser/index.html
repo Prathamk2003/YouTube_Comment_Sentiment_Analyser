@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Comment Sentiment Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="stripe"></div>
+<div class="container">
+    <h1>YouTube Comment Sentiment Analyzer</h1>
+    <form action="/" method="post">
+        <p>Enter the YouTube video ID:</p>
+        <input type="text" name="video_id" class="input-box" placeholder="Enter YouTube video ID...">
+        <br>
+        <button type="submit" class="button">Analyze Comments</button>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Comment Analyzer</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #000;
+    }
+    canvas {
+        display: block;
+    }
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #fff;
+    }
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+    .input-box {
+        width: 80%;
+        padding: 10px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .button {
+        padding: 10px 20px;
+        font-size: 1.1em;
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.1s ease;
+        text-decoration: none;
+    }
+    .button:hover {
+        background-color: #000000;
+    }
+    .stripe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 20px; /* Adjust the width as needed */
+        background: linear-gradient(to bottom, #ff0000, #0000ff);
+    }
+
+    .bar-graph {
+    height: 300px;
+    width: 50px;
+    position: absolute;
+    top: 50%;
+    left: -50px; /* Move the bar more to the left by setting a negative value */
+    transform: translateY(-50%);
+    background-color: #fdfbfb;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.bar {
+    flex: 1; /* Fill remaining space */
+    background-color: rgb(81, 70, 70); /* Change bar color to red */
+    margin-bottom: 5px; /* Adjust margin as needed */
+}
+
+
+    .likes-title {
+        font-size:small;
+        margin-bottom: 10px;
+        color: #000000;
+        font-family: 'Arial Black', sans-serif; /* Use a good font */
+    }
+
+.sentiment-bar {
+    right: 300px; /* Move the bar closer to the input box */
+    left: auto; /* Reset the left property */
+}
+
+.sentiment-title {
+    font-size: small;
+    margin-bottom: 5px;
+    color: #000000;
+    font-family: 'Arial Black', sans-serif;
+    text-align: left; /* Center the text horizontally */
+    width: 150%; /* Set the width to fill the entire bar */
+}
+
+
+
+.bar.positive {
+    background-color: rgb(21, 229, 21); /* Set the color for positive sentiment */
+}
+
+.bar.neutral {
+    background-color: gray; /* Set the color for neutral sentiment */
+}
+
+.bar.negative {
+    background-color: rgb(80, 4, 7); /* Set the color for negative sentiment */
+}
+
+
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<div class="container">
+    <h1>Youtube comment sentiment analyze</h1>
+    <p>Enter the YouTube video link:</p>
+    <input type="text" id="youtubeLink" class="input-box" placeholder="Enter YouTube video link...">
+    <br>
+    <a href="#" class="button">Analyze Comments</a>
+    <div id="likesCount" class="bar-graph">
+        <p class="likes-title">Likes</p> <!-- Likes title with a good font -->
+        <div class="bar" id="likesBar"></div>
+    </div>
+    <div id="commentAnalysis"></div>
+</div>
+
+<!-- ... other HTML ... -->
+<div id="commentSentimentCount" class="bar-graph sentiment-bar">
+    <p class="sentiment-title"> Analysis</p>
+    <div class="bar negative" id="negativeBar"></div>
+    <div class="bar neutral" id="neutralBar"></div>
+    <div class="bar positive" id="positiveBar"></div>
+ 
+   
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+    // Set up Three.js scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Load YouTube logo model
+    const loader = new THREE.GLTFLoader();
+    loader.load('https://threejs.org/examples/models/gltf/YouTube.glb', function (gltf) {
+        scene.add(gltf.scene);
+    }, undefined, function (error) {
+        console.error(error);
+    });
+
+    // Position the camera
+    camera.position.z = 100;
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        // Render the scene
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Add event listener to the Analyze Comments button
+    document.querySelector('.button').addEventListener('click', function() {
+        var youtubeLink = document.getElementById('youtubeLink').value;
+        fetch('/analyze', {
+            method: 'POST',
+            body: JSON.stringify({youtubeLink: youtubeLink}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            var likesCount = data.likesCount;
+            var likesBar = document.getElementById('likesBar');
+            likesBar.style.width = likesCount + 'px';
+            document.getElementById('commentAnalysis').innerHTML = '<p>Sentiment Analysis:</p><ul>';
+            data.sentimentLabels.forEach(label => {
+                document.getElementById('commentAnalysis').innerHTML += '<li>' + label + '</li>';
+            });
+            document.getElementById('commentAnalysis').innerHTML += '</ul>';
+            console.log('Accuracy:', data.accuracy);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    
+</script>
+</body>
+</html>

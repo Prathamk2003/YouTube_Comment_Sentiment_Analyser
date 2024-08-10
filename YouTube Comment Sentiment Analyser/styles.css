@@ -1,0 +1,114 @@
+
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #000;
+    }
+    canvas {
+        display: block;
+    }
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #fff;
+    }
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+    .input-box {
+        width: 80%;
+        padding: 10px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .button {
+        padding: 10px 20px;
+        font-size: 1.1em;
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.1s ease;
+        text-decoration: none;
+    }
+    .button:hover {
+        background-color: #000000;
+    }
+    .stripe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 20px; /* Adjust the width as needed */
+        background: linear-gradient(to bottom, #ff0000, #0000ff);
+    }
+
+    .bar-graph {
+    height: 300px;
+    width: 50px;
+    position: absolute;
+    top: 50%;
+    left: -50px; /* Move the bar more to the left by setting a negative value */
+    transform: translateY(-50%);
+    background-color: #fdfbfb;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.bar {
+    flex: 1; /* Fill remaining space */
+    background-color: rgb(81, 70, 70); /* Change bar color to red */
+    margin-bottom: 5px; /* Adjust margin as needed */
+}
+
+
+    .likes-title {
+        font-size:small;
+        margin-bottom: 10px;
+        color: #000000;
+        font-family: 'Arial Black', sans-serif; /* Use a good font */
+    }
+
+.sentiment-bar {
+    right: 300px; /* Move the bar closer to the input box */
+    left: auto; /* Reset the left property */
+}
+
+.sentiment-title {
+    font-size: small;
+    margin-bottom: 5px;
+    color: #000000;
+    font-family: 'Arial Black', sans-serif;
+    text-align: left; /* Center the text horizontally */
+    width: 150%; /* Set the width to fill the entire bar */
+}
+
+
+
+.bar.positive {
+    background-color: rgb(21, 229, 21); /* Set the color for positive sentiment */
+}
+
+.bar.neutral {
+    background-color: gray; /* Set the color for neutral sentiment */
+}
+
+.bar.negative {
+    background-color: rgb(80, 4, 7); /* Set the color for negative sentiment */
+}
+
+
